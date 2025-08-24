@@ -1,0 +1,1072 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { 
+  BarChart3, 
+  TrendingUp, 
+  Bell, 
+  Users, 
+  CheckCircle,
+  ArrowRight,
+  Star,
+  Zap,
+  Target,
+  FileText,
+  Smartphone,
+  Heart,
+  DollarSign,
+  AlertTriangle,
+  ChevronLeft, 
+  ChevronRight, 
+  Clock, 
+  Eye
+} from 'lucide-react'
+
+export default function Home() {
+  const [formData, setFormData] = useState({
+    restaurantName: '',
+    email: '',
+    location: '',
+    numLocations: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState('')
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Pain Points FAQ state and functions
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const painPoints = [
+    {
+      icon: DollarSign,
+      title: "You're Losing $119K+ Annually",
+      problem: "Most restaurants lose $9,985 monthly from poor competitive intelligence",
+      stat: "90% revenue gap between 4.4-star vs 3-star restaurants",
+      source: "Black Box Intelligence",
+      gradient: "from-red-500/20 to-orange-500/20",
+      iconColor: "text-red-400",
+      alertIcon: "📉"
+    },
+    {
+      icon: TrendingUp,
+      title: "17% of Restaurants Fail Year One",
+      problem: "Poor market positioning and competitor awareness leads to closure",
+      stat: "72,000+ restaurants closed in 2024 alone",
+      source: "National Restaurant Association",
+      gradient: "from-red-600/20 to-pink-600/20",
+      iconColor: "text-red-500",
+      alertIcon: "🚨"
+    },
+    {
+      icon: Users,
+      title: "Customers Research Before Visiting",
+      problem: "41% research social media, 4 out of 7 Gen Z visit based on reviews",
+      stat: "You can't compete without social intelligence",
+      source: "Dining Trends Report",
+      gradient: "from-amber-500/20 to-yellow-500/20",
+      iconColor: "text-amber-400",
+      alertIcon: "⚡"
+    },
+    {
+      icon: Clock,
+      title: "$3,560 Per Employee Training Cost",
+      problem: "High turnover from poor operational efficiency and low margins",
+      stat: "Manual processes = stressed staff = turnover",
+      source: "2025 State of Restaurants Report",
+      gradient: "from-blue-500/20 to-cyan-500/20",
+      iconColor: "text-blue-400",
+      alertIcon: "🔄"
+    },
+    {
+      icon: Target,
+      title: "Flying Blind on Pricing",
+      problem: "Without competitor price tracking, you're either overpriced or leaving money on table",
+      stat: "Food costs up 21% - pricing strategy critical",
+      source: "Producer Price Index 2024",
+      gradient: "from-purple-500/20 to-violet-500/20",
+      iconColor: "text-purple-400",
+      alertIcon: "🎯"
+    },
+    {
+      icon: AlertTriangle,
+      title: "$162 Billion in Food Waste",
+      problem: "Restaurants waste 30-40% of inventory due to poor demand prediction",
+      stat: "Menu optimization could save thousands monthly",
+      source: "Restaurant Industry Data",
+      gradient: "from-orange-500/20 to-red-500/20",
+      iconColor: "text-orange-400",
+      alertIcon: "⛔"
+    },
+    {
+      icon: BarChart3,
+      title: "Only 13% Happy with Current Tech",
+      problem: "76% know tech gives advantage, but existing solutions fail them",
+      stat: "Massive gap between need and satisfaction",
+      source: "National Restaurant Association 2024",
+      gradient: "from-green-500/20 to-emerald-500/20",
+      iconColor: "text-green-400",
+      alertIcon: "📊"
+    },
+    {
+      icon: Eye,
+      title: "Competitors Intensifying in 2025",
+      problem: "8 in 10 operators expect competitive pressures to increase",
+      stat: "Without intelligence, you'll be left behind",
+      source: "Restaurant Industry Outlook",
+      gradient: "from-indigo-500/20 to-blue-500/20",
+      iconColor: "text-indigo-400",
+      alertIcon: "🚩"
+    },
+    {
+      icon: Zap,
+      title: "Manual Research Wastes 15+ Hours/Month",
+      problem: "Time spent checking competitor menus, prices, reviews manually",
+      stat: "AI can do in minutes what takes you hours",
+      source: "Industry Time Studies",
+      gradient: "from-yellow-500/20 to-orange-500/20",
+      iconColor: "text-yellow-400",
+      alertIcon: "⏰"
+    },
+    {
+      icon: FileText,
+      title: "Consultant Fees: $15K-$60K Annually",
+      problem: "Restaurants allocate 3-6% of sales to consulting and marketing",
+      stat: "PlateTrend replaces consultants at $149/month",
+      source: "Aaron Allen & Associates",
+      gradient: "from-pink-500/20 to-rose-500/20",
+      iconColor: "text-pink-400",
+      alertIcon: "💰"
+    },
+    {
+      icon: Star,
+      title: "Profit Margins Only 3-5%",
+      problem: "Razor-thin margins mean every pricing decision matters",
+      stat: "Small improvements = massive profit impact",
+      source: "Restaurant Profit Analysis",
+      gradient: "from-teal-500/20 to-cyan-500/20",
+      iconColor: "text-teal-400",
+      alertIcon: "📈"
+    },
+    {
+      icon: Heart,
+      title: "Customer Sentiment = Revenue",
+      problem: "Without tracking sentiment, you can't optimize customer experience",
+      stat: "4.4-star restaurants earn $57K vs $30K weekly",
+      source: "Black Box Intelligence",
+      gradient: "from-rose-500/20 to-pink-500/20",
+      iconColor: "text-rose-400",
+      alertIcon: "⭐"
+    }
+  ]
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === painPoints.length - 1 ? 0 : prevIndex + 1
+    )
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? painPoints.length - 1 : prevIndex - 1
+    )
+  }
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index)
+  }
+
+  const getVisibleCards = () => {
+    const cards = []
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % painPoints.length
+      cards.push(painPoints[index])
+    }
+    return cards
+  }
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setIsSubmitted(true)
+      } else {
+        setError(data.error || 'Something went wrong')
+      }
+    } catch {
+      setError('Network error. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50/30 to-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full backdrop-blur-xl bg-white/80 border-b border-white/20 z-50 shadow-lg shadow-stone-900/5">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="flex justify-between items-center py-5">
+            <div className="flex items-center space-x-4">
+              <img 
+                src="/images/platetrend_logo.png"
+                alt="PlateTrend - Restaurant Intelligence"
+                className="h-16 w-auto hover:opacity-80 transition-opacity duration-200"
+                onError={(e) => {
+                  const target = e.target;
+                  target.style.display = 'none';
+                }}
+              />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold bg-gradient-to-r from-slate-700 to-slate-600 bg-clip-text text-transparent">
+                  PlateTrend
+                </span>
+                <span className="text-sm font-medium text-amber-700 -mt-1">
+                  Restaurant Intelligence
+                </span>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-stone-600 hover:text-stone-900 transition-colors font-medium">Features</a>
+              <a href="#pricing" className="text-stone-600 hover:text-stone-900 transition-colors font-medium">Pricing</a>
+              <a href="/faq" className="text-stone-600 hover:text-stone-900 transition-colors font-medium">FAQ</a>
+              <a href="/contact" className="text-stone-600 hover:text-stone-900 transition-colors font-medium">Contact Us</a>
+              <button 
+                onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                className="backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-amber-700/90 border border-amber-500/30 text-white px-6 py-2.5 rounded-xl hover:from-amber-700 hover:to-amber-800 transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+              >
+                Join Waitlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 px-6 sm:px-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-amber-200 to-stone-200 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-stone-200 to-amber-200 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 backdrop-blur-xl bg-amber-100/50 border border-amber-200/50 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-8 shadow-lg">
+              <Bell className="w-4 h-4" />
+              <span>Join the Waitlist</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold text-stone-900 mb-8 leading-tight">
+              Stop Guessing.
+              <br />
+              <span className="bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
+                Start Winning.
+              </span>
+            </h1>
+            
+            <p className="text-xl text-stone-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              AI-powered restaurant intelligence that helps you understand your competition, 
+              optimize your menu, and make data-driven decisions that drive real results.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <button 
+                onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                className="backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-amber-700/90 border border-amber-500/30 text-white px-10 py-4 rounded-xl hover:from-amber-700 hover:to-amber-800 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-xl flex items-center space-x-3"
+              >
+                <Bell className="w-6 h-6" />
+                <span>Join Waitlist Now</span>
+                <ArrowRight className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="flex justify-center mb-16">
+              <div className="backdrop-blur-xl bg-white/60 border border-white/40 rounded-2xl px-8 py-4 shadow-lg">
+                <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-8 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-stone-700 font-medium">Live Waitlist</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                    <span className="text-stone-700 font-medium">2026 Launch</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-amber-400 rounded-full"></div>
+                    <span className="text-stone-700 font-medium">Early Bird Pricing for Wait List Users</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Image - Restaurant Terrace */}
+          <div className="relative max-w-4xl mx-auto">
+            <div className="backdrop-blur-xl bg-white/40 border border-white/30 rounded-3xl p-8 shadow-2xl">
+              <div className="aspect-video bg-gradient-to-br from-stone-100 to-amber-100 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                {/* Beautiful Restaurant Terrace Hero Image */}
+                <img 
+                  src="/images/hero/restaurant-terrace-hero.jpg"
+                  alt="Premium Restaurant Terrace - PlateTrend Analytics"
+                  className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/30 rounded-2xl"></div>
+                <div className="relative z-10 text-center text-white">
+                  <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-8 shadow-xl max-w-2xl mx-auto">
+                    <img 
+                      src="/images/platetrend_logo.png"
+                      alt="PlateTrend - Restaurant Intelligence"
+                      className="h-48 w-auto mx-auto mb-8 filter brightness-0 invert"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    <p className="font-bold text-2xl mb-3">AI-Powered Restaurant Intelligence</p>
+                    <p className="text-lg opacity-90">Turn competitor insights into profit opportunities</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What PlateTrend Actually Does - Core Product Explanation */}
+      <section className="py-16 bg-gradient-to-br from-amber-50/40 to-white relative">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-4">
+              What Does PlateTrend Do?
+            </h2>
+            <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+              Our AI works 24/7 to gather competitive intelligence and optimize your restaurant
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Left: What it does */}
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-blue-600 font-bold text-sm">1</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-stone-900 mb-1">Scans Local Competitors Daily</h3>
+                  <p className="text-stone-600 text-sm">Automatically monitors competitor menus, prices, reviews, and social media in your area</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-green-600 font-bold text-sm">2</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-stone-900 mb-1">Finds Supply & Ingredient Opportunities</h3>
+                  <p className="text-stone-600 text-sm">Compares local suppliers and suggests cost-saving ingredient swaps based on market trends</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-amber-600 font-bold text-sm">3</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-stone-900 mb-1">Optimizes Your Menu & Pricing</h3>
+                  <p className="text-stone-600 text-sm">AI analyzes gaps and recommends specific menu additions, price changes, and positioning</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-purple-600 font-bold text-sm">4</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-stone-900 mb-1">Delivers Actionable Reports</h3>
+                  <p className="text-stone-600 text-sm">Monthly intelligence reports with specific recommendations you can implement immediately</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Simple visual */}
+            <div className="bg-white/80 rounded-2xl p-6 shadow-lg border border-stone-200/50">
+              <div className="text-center mb-4">
+                <div className="text-2xl font-bold text-stone-900">Your Restaurant</div>
+                <div className="text-sm text-stone-500">vs 23 Local Competitors</div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-4 bg-red-100 rounded-lg border-l-4 border-red-500 shadow-sm">
+                  <span className="text-sm font-semibold text-stone-800">Burger Price</span>
+                  <span className="text-red-700 font-bold text-sm bg-red-200 px-2 py-1 rounded">$2.50 UNDER market</span>
+                </div>
+                <div className="flex justify-between items-center p-4 bg-green-100 rounded-lg border-l-4 border-green-500 shadow-sm">
+                  <span className="text-sm font-semibold text-stone-800">Missing Menu Items</span>
+                  <span className="text-green-700 font-bold text-sm bg-green-200 px-2 py-1 rounded">3 HIGH-PROFIT gaps</span>
+                </div>
+                <div className="flex justify-between items-center p-4 bg-blue-100 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                  <span className="text-sm font-semibold text-stone-800">Local Suppliers</span>
+                  <span className="text-blue-700 font-bold text-sm bg-blue-200 px-2 py-1 rounded">15% SAVINGS found</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+{/* Your AI Restaurant Intelligence Solution */}
+<section className="py-20 bg-gradient-to-br from-white to-amber-50/30 relative overflow-hidden">
+  <div className="max-w-7xl mx-auto px-6 sm:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">Your AI Restaurant Intelligence Solution</h2>
+      <p className="text-xl text-stone-600 max-w-3xl mx-auto mb-8">
+        Turn those 3 problems into profit opportunities with AI that works 24/7
+      </p>
+      <div className="inline-flex items-center space-x-2 backdrop-blur-xl bg-green-100/50 border border-green-200/50 text-green-800 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+        <CheckCircle className="w-4 h-4" />
+        <span>$149/month vs $15K consultant fees</span>
+      </div>
+    </div>
+
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Solution Features */}
+      <div className="space-y-8">
+        {[
+          {
+            icon: DollarSign,
+            title: "Smart Menu Pricing",
+            description: "Real-time competitor price tracking and AI-powered pricing recommendations that optimize your profit margins",
+            gradient: "from-blue-200/40 to-cyan-200/40",
+            iconColor: "text-blue-600",
+            solves: "Pricing Questions"
+          },
+          {
+            icon: TrendingUp,
+            title: "Spot Opportunity Trends",
+            description: "Identify emerging menu items and customer preferences before your competitors catch on",
+            gradient: "from-emerald-200/40 to-green-200/40",
+            iconColor: "text-emerald-600",
+            solves: "Trending Items"
+          },
+          {
+            icon: Users,
+            title: "Customer Analysis",
+            description: "Deep sentiment analysis of competitor reviews to understand why customers choose them",
+            gradient: "from-amber-200/40 to-orange-200/40",
+            iconColor: "text-amber-600",
+            solves: "Customer Insights"
+          },
+          {
+            icon: FileText,
+            title: "Monthly Reports",
+            description: "Automated strategic analysis delivered fresh every month - no expensive consultants needed",
+            gradient: "from-purple-200/40 to-pink-200/40",
+            iconColor: "text-purple-600",
+            solves: "Expensive Consulting Reports"
+          }
+        ].map((feature, index) => (
+          <div key={index} className="group flex items-start space-x-4">
+            <div className={`w-14 h-14 backdrop-blur-xl bg-gradient-to-br ${feature.gradient} border border-white/40 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
+              <feature.icon className={`w-7 h-7 ${feature.iconColor} relative z-10`} />
+            </div>
+            <div>
+              <div className="flex items-center mb-2">
+                <h3 className="text-xl font-semibold text-stone-900 mr-3">{feature.title}</h3>
+                <span className="text-xs bg-green-100/80 text-green-700 px-2 py-1 rounded-full font-medium">
+                  Solves: {feature.solves}
+                </span>
+              </div>
+              <p className="text-stone-600 leading-relaxed">{feature.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Demo Mockup - Updated */}
+      <div className="backdrop-blur-xl bg-white/60 border border-white/40 rounded-3xl shadow-2xl p-8 hover:shadow-3xl transition-all duration-300">
+        <div className="bg-stone-900 rounded-2xl p-6 mb-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-emerald-500/5 to-blue-500/5"></div>
+          <div className="flex items-center space-x-2 mb-4 relative z-10">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <span className="text-stone-400 text-xs ml-4">PlateTrend Intelligence</span>
+          </div>
+          <div className="text-green-400 text-sm font-mono leading-relaxed relative z-10">
+            <div className="flex items-center mb-1">
+              <Zap className="w-3 h-3 mr-2" />
+              <span>Analyzing 23 local competitors...</span>
+            </div>
+            <div className="flex items-center mb-1">
+              <BarChart3 className="w-3 h-3 mr-2" />
+              <span>Processing 1,247 customer reviews</span>
+            </div>
+            <div className="flex items-center mb-1">
+              <TrendingUp className="w-3 h-3 mr-2" />
+              <span>Identifying pricing opportunities...</span>
+            </div>
+            <div className="flex items-center">
+              <Star className="w-3 h-3 mr-2 text-yellow-400" />
+              <span className="text-yellow-400 font-bold">3 PROFIT OPPORTUNITIES FOUND</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="flex justify-between items-center p-4 backdrop-blur-xl bg-blue-50/60 border border-blue-200/50 rounded-xl">
+            <span className="text-stone-700 font-medium">Market avg burger price</span>
+            <span className="font-bold text-blue-600 text-lg">$14.50</span>
+          </div>
+          <div className="flex justify-between items-center p-4 backdrop-blur-xl bg-red-50/60 border border-red-200/50 rounded-xl">
+            <span className="text-stone-700 font-medium">Your current price</span>
+            <span className="font-bold text-red-600 text-lg">$12.00</span>
+          </div>
+          <div className="p-4 backdrop-blur-xl bg-gradient-to-r from-green-50/60 to-blue-50/60 border border-green-300/50 rounded-xl border-l-4 border-l-green-500">
+            <p className="text-sm text-stone-700 font-medium mb-2">
+              <span className="font-bold text-green-600">AI Recommendation:</span> Increase to $13.75. Customer sentiment analysis shows 89% satisfaction with quality.
+            </p>
+            <div className="flex items-center">
+              <DollarSign className="w-4 h-4 text-green-600 mr-1" />
+              <p className="text-xs text-green-600 font-bold">
+                Monthly revenue increase: +$2,847
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* PlateTrend Quality Value Index (QVI) */}
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-stone-900 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 backdrop-blur-xl bg-amber-500/20 border border-amber-400/30 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
+              <Star className="w-4 h-4" />
+              <span>Proprietary Algorithm</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Introducing the <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Quality Value Index</span>
+            </h2>
+            <p className="text-xl text-stone-300 max-w-3xl mx-auto">
+              The first AI-powered metric that shows exactly how customers perceive your restaurant's value compared to competitors
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* QVI Explanation */}
+            <div className="space-y-8">
+              <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6">
+                <h3 className="text-2xl font-bold text-white mb-4">How QVI Works</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-blue-400 text-sm font-bold">1</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold">Social Media Aggregation</h4>
+                      <p className="text-stone-400 text-sm">Scrapes 10,000+ reviews from Google, Yelp, Facebook, Instagram</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-green-400 text-sm font-bold">2</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold">Sentiment Analysis</h4>
+                      <p className="text-stone-400 text-sm">AI analyzes quality mentions vs. price points mentioned</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-amber-400 text-sm font-bold">3</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold">Value Calculation</h4>
+                      <p className="text-stone-400 text-sm">Creates proprietary score: Quality perception ÷ Price perception</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="backdrop-blur-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-400/20 rounded-2xl p-6">
+                <h4 className="text-amber-300 font-semibold mb-3">🎯 What QVI Reveals:</h4>
+                <ul className="space-y-2 text-stone-300 text-sm">
+                  <li>• Are you overpriced for your perceived quality?</li>
+                  <li>• Which competitors offer "better value" in customers' minds?</li>
+                  <li>• What quality improvements would justify higher prices?</li>
+                  <li>• How to position against "cheap" vs "premium" competitors</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* QVI Dashboard Mockup */}
+            <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-white">Quality Value Index Report</h3>
+                <div className="text-xs text-stone-400">Last updated: 2 hours ago</div>
+              </div>
+
+              {/* Your Restaurant QVI Score */}
+              <div className="text-center mb-8">
+                <div className="relative w-32 h-32 mx-auto mb-4">
+                  <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="50" stroke="currentColor" strokeWidth="8" fill="none" className="text-stone-700" />
+                    <circle cx="60" cy="60" r="50" stroke="currentColor" strokeWidth="8" fill="none" strokeDasharray="314" strokeDashoffset="125" className="text-amber-400" strokeLinecap="round" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-amber-400">7.2</div>
+                      <div className="text-xs text-stone-400">QVI Score</div>
+                    </div>
+                  </div>
+                </div>
+                <h4 className="text-white font-semibold">Your Restaurant</h4>
+                <p className="text-stone-400 text-sm">"Good quality, fair price"</p>
+              </div>
+
+              {/* Competitor Comparison */}
+              <div className="space-y-3">
+                <h4 className="text-white font-semibold text-sm mb-4">Local Competitor QVI Scores</h4>
+                
+                <div className="flex justify-between items-center p-3 backdrop-blur-xl bg-red-500/10 border border-red-400/20 rounded-lg">
+                  <div>
+                    <span className="text-white text-sm font-medium">Bella's Bistro</span>
+                    <p className="text-red-300 text-xs">"Overpriced for quality"</p>
+                  </div>
+                  <div className="text-red-400 font-bold">4.1</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 backdrop-blur-xl bg-amber-500/10 border border-amber-400/20 rounded-lg">
+                  <div>
+                    <span className="text-white text-sm font-medium">Your Restaurant</span>
+                    <p className="text-amber-300 text-xs">"Good value sweet spot"</p>
+                  </div>
+                  <div className="text-amber-400 font-bold">7.2</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 backdrop-blur-xl bg-green-500/10 border border-green-400/20 rounded-lg">
+                  <div>
+                    <span className="text-white text-sm font-medium">Corner Cafe</span>
+                    <p className="text-green-300 text-xs">"Excellent value"</p>
+                  </div>
+                  <div className="text-green-400 font-bold">8.9</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 backdrop-blur-xl bg-blue-500/10 border border-blue-400/20 rounded-lg">
+                  <div>
+                    <span className="text-white text-sm font-medium">Fast Bite</span>
+                    <p className="text-blue-300 text-xs">"Cheap but lower quality"</p>
+                  </div>
+                  <div className="text-blue-400 font-bold">6.8</div>
+                </div>
+              </div>
+
+              {/* AI Recommendations */}
+              <div className="mt-6 p-4 backdrop-blur-xl bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-400/20 rounded-xl">
+                <div className="flex items-center mb-3">
+                  <Zap className="w-4 h-4 text-green-400 mr-2" />
+                  <span className="text-green-300 font-semibold text-sm">AI Recommendation</span>
+                </div>
+                <p className="text-white text-sm mb-2">
+                  To reach 8.5+ QVI Score:
+                </p>
+                <ul className="text-stone-300 text-xs space-y-1">
+                  <li>• Improve food presentation (mentioned in 67% of reviews)</li>
+                  <li>• Add premium ingredients to 3 signature dishes</li>
+                  <li>• Increase prices by 8% after quality improvements</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center mt-16">
+            <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold text-white mb-4">See Your QVI Score</h3>
+              <p className="text-stone-300 mb-6">
+                Get your restaurant's Quality Value Index and detailed competitive analysis in your first report.
+              </p>
+              <button 
+                onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                className="backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-orange-600/90 border border-amber-500/30 text-white px-8 py-3 rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+              >
+                Join Waitlist for Early Access
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pain Points FAQ Section */}
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-stone-900 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-96 h-96 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-72 h-72 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 backdrop-blur-xl bg-red-500/20 border border-red-400/30 text-red-300 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Restaurant Industry Crisis</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              12 Painful Problems 
+              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent block">
+                Killing Restaurant Profits
+              </span>
+            </h2>
+            <p className="text-xl text-stone-300 max-w-3xl mx-auto mb-8">
+              Every month you ignore these problems, your competitors gain advantage. 
+              How many of these are bleeding your profits?
+            </p>
+          </div>
+
+          <div className="relative">
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 backdrop-blur-xl bg-white/10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 shadow-lg"
+            >
+              <ChevronLeft className="w-6 h-6 text-white" />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 backdrop-blur-xl bg-white/10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 shadow-lg"
+            >
+              <ChevronRight className="w-6 h-6 text-white" />
+            </button>
+
+            <div className="mx-16 overflow-hidden">
+              <div className="grid md:grid-cols-3 gap-6">
+                {getVisibleCards().map((painPoint, index) => {
+                  const CardIcon = painPoint.icon
+                  return (
+                    <div 
+                      key={`${currentIndex}-${index}`}
+                      className={`backdrop-blur-xl bg-gradient-to-br ${painPoint.gradient} border border-white/10 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 group`}
+                    >
+                      <div className="w-16 h-16 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <CardIcon className={`w-8 h-8 ${painPoint.iconColor}`} />
+                      </div>
+
+                      <h3 className="text-xl font-bold text-white mb-3 leading-tight">
+                        {painPoint.title}
+                      </h3>
+                      
+                      <p className="text-stone-300 text-sm mb-4 leading-relaxed">
+                        {painPoint.problem}
+                      </p>
+
+                      <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+                        <p className="text-white font-semibold text-sm mb-1 flex items-center">
+                          <span className="mr-2 text-lg">{painPoint.alertIcon}</span> {painPoint.stat}
+                        </p>
+                        <p className="text-stone-400 text-xs">
+                          Source: {painPoint.source}
+                        </p>
+                      </div>
+
+                      <div className="text-center">
+                        <button 
+                          onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                          className="text-amber-400 hover:text-amber-300 font-medium text-sm transition-colors duration-300 hover:underline"
+                        >
+                          Fix This Problem →
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-12 space-x-2">
+            {painPoints.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex 
+                    ? 'bg-amber-400 scale-125' 
+                    : 'bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="text-center mt-16">
+            <div className="backdrop-blur-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-400/20 rounded-2xl p-8 max-w-4xl mx-auto">
+              <h3 className="text-3xl font-bold text-white mb-4">
+                How Many Problems Are You Ignoring?
+              </h3>
+              <p className="text-xl text-stone-200 mb-6">
+                Every day you wait, these problems compound. Smart restaurant owners are already using PlateTrend to solve them.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button 
+                  onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-orange-600/90 border border-amber-500/30 text-white px-8 py-4 rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-lg"
+                >
+                  Stop the Bleeding - Join Waitlist
+                </button>
+                <p className="text-stone-400 text-sm">
+                  500 beta spots available • 50% early bird discount
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src="/images/misc/empty-restaurant.jpg"
+            alt="Empty Restaurant"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-900/80 via-stone-900/85 to-black/90"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 backdrop-blur-xl bg-red-500/20 border border-red-400/30 text-red-300 px-4 py-2 rounded-full text-sm font-medium mb-8 shadow-lg">
+              <AlertTriangle className="w-4 h-4" />
+              <span>The Cost of Waiting</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight">
+              Every Month You Wait,
+              <br />
+              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                Your Competitors Win
+              </span>
+            </h2>
+            
+            <p className="text-xl text-stone-200 max-w-3xl mx-auto mb-12 leading-relaxed">
+              While you're manually checking menus and guessing at prices, smart restaurant owners are using AI to steal your customers and optimize their profits.
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="space-y-6">
+              <h3 className="text-3xl md:text-4xl font-bold text-white">
+                Stop Losing Money to Smarter Competitors
+              </h3>
+              
+              <p className="text-xl text-stone-200 max-w-2xl mx-auto">
+                Get your Quality Value Index score and start making data-driven decisions that drive real profits.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button 
+                  id="signup"
+                  className="group backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-orange-600/90 border border-amber-500/30 text-white px-10 py-4 rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-lg flex items-center space-x-3"
+                >
+                  <Zap className="w-6 h-6" />
+                  <span>Secure My Early Access Spot</span>
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <div className="text-stone-400 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-400" />
+                    <span>No credit card required</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="py-20 bg-white/60 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">Simple, Profitable Pricing</h2>
+            <p className="text-xl text-stone-600">Choose the plan that fits your restaurant's size</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                name: "Starter",
+                description: "Perfect for single location restaurants",
+                price: "$149",
+                features: ["1 Restaurant Location", "Competitor Analysis", "Monthly Reports", "Basic Trends"],
+                popular: false
+              },
+              {
+                name: "Growth", 
+                description: "For restaurants ready to scale",
+                price: "$249",
+                features: ["Up to 5 Locations", "Advanced Analytics", "Weekly Reports", "Social Media Intelligence", "Trend Alerts"],
+                popular: true
+              },
+              {
+                name: "Enterprise",
+                description: "For restaurant groups and chains", 
+                price: "$499",
+                features: ["Unlimited Locations", "Custom Reports", "API Access", "Priority Support", "Dedicated Account Manager"],
+                popular: false
+              }
+            ].map((plan, index) => (
+              <div key={index} className={`group backdrop-blur-xl bg-white/70 border rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 relative ${plan.popular ? 'border-amber-300/60 shadow-xl scale-105' : 'border-white/40'}`}>
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-amber-700/90 border border-amber-500/30 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+                    Most Popular
+                  </div>
+                )}
+                <h3 className="text-xl font-semibold text-stone-900 mb-2">{plan.name}</h3>
+                <p className="text-stone-600 mb-6">{plan.description}</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-stone-900">{plan.price}</span>
+                  <span className="text-stone-600">/month</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center text-sm">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-3 flex-shrink-0" />
+                      <span className="text-stone-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button 
+                  onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}
+                  className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${
+                    plan.popular 
+                      ? 'backdrop-blur-xl bg-gradient-to-r from-amber-600/90 to-amber-700/90 border border-amber-500/30 text-white hover:from-amber-700 hover:to-amber-800 shadow-lg hover:shadow-xl' 
+                      : 'backdrop-blur-xl bg-white/60 border-2 border-stone-300/60 text-stone-700 hover:border-amber-500 hover:text-amber-700 hover:bg-amber-50/50'
+                  }`}
+                >
+                  Get Notified
+                </button>
+              </div>
+            ))}
+          </div>
+          
+          {/* Trust Statistics */}
+          <div className="grid md:grid-cols-3 gap-8 mt-12 text-center">
+            <div className="text-stone-700">
+              <div className="text-3xl font-bold mb-2">5-min</div>
+              <div className="text-stone-600">Setup Time</div>
+            </div>
+            <div className="text-stone-700">
+              <div className="text-3xl font-bold mb-2">$15K+</div>
+              <div className="text-stone-600">Saved vs Consultants</div>
+            </div>
+            <div className="text-stone-700">
+              <div className="text-3xl font-bold mb-2">24/7</div>
+              <div className="text-stone-600">AI Monitoring</div>
+            </div>
+          </div>    
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-stone-900/95 backdrop-blur-xl text-white py-12 border-t border-stone-800/50">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-3 mb-4">
+                <img 
+                  src="/images/platetrend_logo.png"
+                  alt="PlateTrend - Restaurant Intelligence"
+                  className="h-16 w-auto"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+              <p className="text-stone-400 mb-6 max-w-md leading-relaxed">
+                AI-powered restaurant intelligence that helps you stop guessing and start winning against your competition.
+              </p>
+              <div className="flex space-x-4">
+                {[
+                  { icon: Users, label: 'Twitter' },
+                  { icon: Users, label: 'LinkedIn' },
+                  { icon: Users, label: 'Instagram' }
+                ].map((social, i) => (
+                  <a key={i} href="#" className="w-10 h-10 backdrop-blur-xl bg-stone-800/60 border border-stone-700/50 rounded-lg flex items-center justify-center hover:bg-stone-700/60 transition-all duration-300 hover:scale-110">
+                    <social.icon className="w-4 h-4 text-stone-300" />
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4 text-lg">Product</h4>
+              <ul className="space-y-3 text-stone-400">
+                <li><a href="#features" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Features</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Pricing</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Demo</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>API</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4 text-lg">Company</h4>
+              <ul className="space-y-3 text-stone-400">
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>About</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Privacy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center group">
+                  <span className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1 text-sm">🍴</span>Terms</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-stone-800/50 mt-12 pt-8 text-center text-stone-400">
+            <p>© 2025 PlateTrend. All rights reserved. Made with ❤️ for restaurant owners.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  )
+}

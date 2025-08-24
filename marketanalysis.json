@@ -1,0 +1,968 @@
+{
+    "meta": {
+      "project_id": "platetrend",
+      "title": "PlateTrend Market Analysis Dashboard",
+      "subtitle": "Research-backed insights for restaurant intelligence platform",
+      "last_updated": "2025-08-23T16:30:00Z"
+    },
+    "nav": [
+      "market_overview",
+      "pricing_strategy",
+      "unit_economics",
+      "competitive_landscape",
+      "research_sources",
+      "burndown"
+    ],
+    "confidence": {
+      "score": 0.72,
+      "label": "72%",
+      "drivers": [
+        "source_quality",
+        "data_freshness",
+        "agreement_across_sources"
+      ],
+      "method": "0.25*source_quality + 0.25*freshness + 0.25*agreement + 0.25*(1 - issues)",
+      "notes": "Weighted by load-bearing sources, recency \u226436 months, and contradiction penalties."
+    },
+    "sections": {
+      "market_overview": {
+        "summary_bullets": [
+          "US foodservice sales forecast \u2248 $1.5T (2025).",
+          "Restaurant management software CAGR ~17\u201318% through 2030.",
+          "Cadence/radius: Starter monthly pulse + quarterly deep-dive; Growth weekly; Enterprise daily; radius density-aware (3\u20135mi default suburbs; 1\u20133mi dense cores; 5\u201310mi low-density)."
+        ],
+        "kpis": [
+          {
+            "label": "Industry Sales",
+            "value": 1500000000000,
+            "unit": "USD/yr",
+            "ref": "facts.F001"
+          },
+          {
+            "label": "Employment",
+            "value": 15900000,
+            "unit": "people",
+            "ref": "facts.F002"
+          },
+          {
+            "label": "RMS CAGR",
+            "value": 17.4,
+            "unit": "%",
+            "ref": "facts.F005"
+          }
+        ],
+        "charts": {
+          "cagr_bar": [
+            {
+              "label": "RMS CAGR",
+              "value": 17.4
+            }
+          ]
+        }
+      },
+      "pricing_strategy": {
+        "tiers_table": [
+          {
+            "tier": "Starter",
+            "price_usd": 149,
+            "est_cogs_usd": 35,
+            "gm_pct": 76.51,
+            "payback_months": 4.39
+          },
+          {
+            "tier": "Growth",
+            "price_usd": 249,
+            "est_cogs_usd": 55,
+            "gm_pct": 77.91,
+            "payback_months": 3.87
+          },
+          {
+            "tier": "Enterprise",
+            "price_usd": 499,
+            "est_cogs_usd": 240,
+            "gm_pct": 51.9,
+            "payback_months": 5.79
+          }
+        ],
+        "starter_definition": {
+          "radius_miles": {
+            "default": 5,
+            "dense_core": 3,
+            "low_density": 7
+          },
+          "competitors_max": 10,
+          "sources_included": [
+            "Google Reviews",
+            "Yelp",
+            "Instagram"
+          ],
+          "cadence": {
+            "pulse": "monthly_cached",
+            "deep_dive": "quarterly_heavy"
+          },
+          "report_credits": {
+            "earned_per_month": 1,
+            "rollover_max": 4,
+            "expires_months": 6
+          },
+          "support": {
+            "channel": "email",
+            "sla_business_days": 2
+          }
+        },
+        "adhoc_pricing": {
+          "starter": {
+            "price_usd": 39.99,
+            "cogs_usd": 12,
+            "gm_pct": 69.99,
+            "notes": "Heavy ad-hoc analysis beyond included cadence/credits"
+          },
+          "growth": {
+            "price_usd": 34.99,
+            "cogs_usd": 10,
+            "gm_pct": 71.42,
+            "notes": "Deep-dive beyond weekly pack"
+          }
+        },
+        "rationale": [
+          "Value-based tiers with strict resource caps and credits to align usage with business moments.",
+          "COGS constrained via proxy budgets, batching, embedding/prompt caches, and metro-wide reuse."
+        ],
+        "links": [
+          {
+            "text": "Full tier calc",
+            "ref": "pricing_unit_economics.tiers"
+          }
+        ]
+      },
+      "unit_economics": {
+        "summary": {
+          "break_even_customers": 33,
+          "mix_note": "Base mix 60% Starter / 30% Growth / 10% Enterprise. Lean ops @ $2.5k fixed \u2192 ~16 BE; Normal ops @ $5k fixed \u2192 ~33 BE."
+        },
+        "gm_chart": [
+          {
+            "label": "Starter",
+            "value": 76.51
+          },
+          {
+            "label": "Growth",
+            "value": 77.91
+          },
+          {
+            "label": "Enterprise",
+            "value": 51.9
+          }
+        ],
+        "table": {
+          "headers": [
+            "Tier",
+            "Price",
+            "Est COGS",
+            "GM%",
+            "Payback (mo)"
+          ],
+          "rows": [
+            [
+              "Starter",
+              149,
+              35,
+              76.51,
+              4.39
+            ],
+            [
+              "Growth",
+              249,
+              55,
+              77.91,
+              3.87
+            ],
+            [
+              "Enterprise",
+              499,
+              240,
+              51.9,
+              5.79
+            ]
+          ]
+        },
+        "refs": [
+          "calc.formulas",
+          "cba.metrics"
+        ]
+      },
+      "competitive_landscape": {
+        "competitors": [
+          {
+            "name": "Square for Restaurants",
+            "segment": "POS",
+            "price_from": 69,
+            "strengths": [
+              "SMB reach"
+            ],
+            "weaknesses": [
+              "analytics depth"
+            ],
+            "source": "S003"
+          },
+          {
+            "name": "Toast",
+            "segment": "POS",
+            "price_from": 69,
+            "strengths": [
+              "QSR/fast-casual fit"
+            ],
+            "weaknesses": [
+              "bundle lock-in"
+            ],
+            "source": "S002"
+          }
+        ],
+        "notes": "PlateTrend positions as an intelligence layer; integrate with leading POS rather than compete."
+      },
+      "research_sources": {
+        "load_bearing": [
+          "S001",
+          "S003",
+          "S004"
+        ],
+        "all": "sources",
+        "contradictions": "contradiction_audit"
+      },
+      "burndown": {
+        "assumptions": {
+          "start_month": "2025-09",
+          "months": 12,
+          "starting_cash_usd": 30000,
+          "fixed_monthly_usd": 5000,
+          "new_customers_per_month": 6,
+          "mix": {
+            "starter_pct": 60,
+            "growth_pct": 30,
+            "enterprise_pct": 10
+          },
+          "tier_prices": {
+            "starter": 149,
+            "growth": 249,
+            "enterprise": 499
+          },
+          "tier_cogs": {
+            "starter": 35,
+            "growth": 55,
+            "enterprise": 240
+          },
+          "report_credit_policy": {
+            "starter_credits_per_month": 1,
+            "rollover_max": 4,
+            "expected_redemption_per_month": 0.6,
+            "unit_cost_usd": 12
+          },
+          "notes": "Credits apply to heavy ad-hoc runs; baseline cadence remains monthly pulse + quarterly deep-dive."
+        },
+        "kpis": {
+          "breakeven_month": "2026-02",
+          "breakeven_customers": 36
+        },
+        "timeseries": [
+          {
+            "month": "2025-09",
+            "customers_total": 6,
+            "mrr_usd": 1094,
+            "cogs_var_usd": 250,
+            "fixed_usd": 5000,
+            "net_burn_usd": 4156,
+            "net_burn_with_credits_usd": 3656,
+            "cumulative_cash_usd": 25844,
+            "cumulative_cash_with_credits_usd": 26344
+          },
+          {
+            "month": "2025-10",
+            "customers_total": 12,
+            "mrr_usd": 2188,
+            "cogs_var_usd": 500,
+            "fixed_usd": 5000,
+            "net_burn_usd": 3312,
+            "net_burn_with_credits_usd": 2812,
+            "cumulative_cash_usd": 22532,
+            "cumulative_cash_with_credits_usd": 23532
+          },
+          {
+            "month": "2025-11",
+            "customers_total": 18,
+            "mrr_usd": 3282,
+            "cogs_var_usd": 750,
+            "fixed_usd": 5000,
+            "net_burn_usd": 2468,
+            "net_burn_with_credits_usd": 1968,
+            "cumulative_cash_usd": 20064,
+            "cumulative_cash_with_credits_usd": 21564
+          },
+          {
+            "month": "2025-12",
+            "customers_total": 24,
+            "mrr_usd": 4376,
+            "cogs_var_usd": 1000,
+            "fixed_usd": 5000,
+            "net_burn_usd": 1624,
+            "net_burn_with_credits_usd": 1624,
+            "cumulative_cash_usd": 18440,
+            "cumulative_cash_with_credits_usd": 19940
+          },
+          {
+            "month": "2026-01",
+            "customers_total": 30,
+            "mrr_usd": 5470,
+            "cogs_var_usd": 1235,
+            "fixed_usd": 5000,
+            "net_burn_usd": 765,
+            "net_burn_with_credits_usd": 765,
+            "cumulative_cash_usd": 17675,
+            "cumulative_cash_with_credits_usd": 19205
+          },
+          {
+            "month": "2026-02",
+            "customers_total": 36,
+            "mrr_usd": 6564,
+            "cogs_var_usd": 1490,
+            "fixed_usd": 5000,
+            "net_burn_usd": -74,
+            "net_burn_with_credits_usd": -74,
+            "cumulative_cash_usd": 17749,
+            "cumulative_cash_with_credits_usd": 19279
+          },
+          {
+            "month": "2026-03",
+            "customers_total": 42,
+            "mrr_usd": 7658,
+            "cogs_var_usd": 1745,
+            "fixed_usd": 5000,
+            "net_burn_usd": -913,
+            "net_burn_with_credits_usd": -913,
+            "cumulative_cash_usd": 18662,
+            "cumulative_cash_with_credits_usd": 20192
+          },
+          {
+            "month": "2026-04",
+            "customers_total": 48,
+            "mrr_usd": 8752,
+            "cogs_var_usd": 2000,
+            "fixed_usd": 5000,
+            "net_burn_usd": -1752,
+            "net_burn_with_credits_usd": -1752,
+            "cumulative_cash_usd": 20414,
+            "cumulative_cash_with_credits_usd": 21944
+          },
+          {
+            "month": "2026-05",
+            "customers_total": 54,
+            "mrr_usd": 9846,
+            "cogs_var_usd": 2255,
+            "fixed_usd": 5000,
+            "net_burn_usd": -2409,
+            "net_burn_with_credits_usd": -2409,
+            "cumulative_cash_usd": 22823,
+            "cumulative_cash_with_credits_usd": 24353
+          },
+          {
+            "month": "2026-06",
+            "customers_total": 60,
+            "mrr_usd": 10940,
+            "cogs_var_usd": 2510,
+            "fixed_usd": 5000,
+            "net_burn_usd": -3430,
+            "net_burn_with_credits_usd": -3430,
+            "cumulative_cash_usd": 26253,
+            "cumulative_cash_with_credits_usd": 27783
+          },
+          {
+            "month": "2026-07",
+            "customers_total": 66,
+            "mrr_usd": 12034,
+            "cogs_var_usd": 2755,
+            "fixed_usd": 5000,
+            "net_burn_usd": -4279,
+            "net_burn_with_credits_usd": -4279,
+            "cumulative_cash_usd": 30532,
+            "cumulative_cash_with_credits_usd": 32062
+          },
+          {
+            "month": "2026-08",
+            "customers_total": 72,
+            "mrr_usd": 15378,
+            "cogs_var_usd": 4395,
+            "fixed_usd": 5000,
+            "net_burn_usd": -5983,
+            "net_burn_with_credits_usd": -5983,
+            "cumulative_cash_usd": 41302,
+            "cumulative_cash_with_credits_usd": 42802
+          }
+        ],
+        "charts": {
+          "net_burn": {
+            "labels": [
+              "2025-09",
+              "2025-10",
+              "2025-11",
+              "2025-12",
+              "2026-01",
+              "2026-02",
+              "2026-03",
+              "2026-04",
+              "2026-05",
+              "2026-06",
+              "2026-07",
+              "2026-08"
+            ],
+            "series": [
+              {
+                "name": "Net Burn",
+                "values": [
+                  4156,
+                  3312,
+                  2468,
+                  1624,
+                  765,
+                  -74,
+                  -913,
+                  -1752,
+                  -2409,
+                  -3430,
+                  -4279,
+                  -5983
+                ]
+              },
+              {
+                "name": "Net Burn (with credits)",
+                "values": [
+                  3656,
+                  2812,
+                  1968,
+                  1624,
+                  765,
+                  -74,
+                  -913,
+                  -1752,
+                  -2409,
+                  -3430,
+                  -4279,
+                  -5983
+                ]
+              }
+            ]
+          },
+          "cumulative_cash": {
+            "labels": [
+              "2025-09",
+              "2025-10",
+              "2025-11",
+              "2025-12",
+              "2026-01",
+              "2026-02",
+              "2026-03",
+              "2026-04",
+              "2026-05",
+              "2026-06",
+              "2026-07",
+              "2026-08"
+            ],
+            "series": [
+              {
+                "name": "Cumulative Cash",
+                "values": [
+                  25844,
+                  22532,
+                  20064,
+                  18440,
+                  17675,
+                  17749,
+                  18662,
+                  20414,
+                  22823,
+                  26253,
+                  30532,
+                  41302
+                ]
+              },
+              {
+                "name": "Cumulative Cash (with credits)",
+                "values": [
+                  26344,
+                  23532,
+                  21564,
+                  19940,
+                  19205,
+                  19279,
+                  20192,
+                  21944,
+                  24353,
+                  27783,
+                  32062,
+                  42802
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "sources": [
+      {
+        "id": "S001",
+        "url": "https://restaurant.org/research-and-media/research/research-reports/state-of-the-industry/",
+        "title": "State of the Restaurant Industry 2025",
+        "publisher": "National Restaurant Association",
+        "date_published": "2025-02-05",
+        "date_accessed": "2025-08-22",
+        "relevance": "load-bearing"
+      },
+      {
+        "id": "S002",
+        "url": "https://pos.toasttab.com/pricing",
+        "title": "Toast POS Pricing",
+        "publisher": "Toast",
+        "date_published": "",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S003",
+        "url": "https://squareup.com/us/en/point-of-sale/restaurants",
+        "title": "Square for Restaurants \u2014 Plans & Pricing",
+        "publisher": "Square",
+        "date_published": "",
+        "date_accessed": "2025-08-22",
+        "relevance": "load-bearing"
+      },
+      {
+        "id": "S004",
+        "url": "https://www.grandviewresearch.com/industry-analysis/restaurant-management-software-market",
+        "title": "Restaurant Management Software Market Size Report",
+        "publisher": "Grand View Research",
+        "date_published": "2024-12-31",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S005",
+        "url": "https://platform.openai.com/docs/pricing",
+        "title": "OpenAI API Pricing",
+        "publisher": "OpenAI",
+        "date_published": "",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S006",
+        "url": "https://vercel.com/pricing",
+        "title": "Vercel Pricing",
+        "publisher": "Vercel",
+        "date_published": "2025-07-18",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S007",
+        "url": "https://supabase.com/pricing",
+        "title": "Supabase Pricing",
+        "publisher": "Supabase",
+        "date_published": "",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S008",
+        "url": "https://brightdata.com/pricing/proxy-network/residential-proxies",
+        "title": "Residential Proxies Pricing",
+        "publisher": "Bright Data",
+        "date_published": "",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      },
+      {
+        "id": "S009",
+        "url": "https://www.hbs.edu/faculty/Pages/item.aspx?num=41233",
+        "title": "Reviews, Reputation, and Revenue: The Case of Yelp.com",
+        "publisher": "Harvard Business School",
+        "date_published": "2016-01-01",
+        "date_accessed": "2025-08-22",
+        "relevance": "supporting"
+      }
+    ],
+    "research_log": [
+      {
+        "q": "National Restaurant Association 2025 restaurant industry sales",
+        "notes": "Confirmed ~$1.5T forecast and ~15.9M employment."
+      },
+      {
+        "q": "Square for Restaurants pricing Plus plan site:squareup.com",
+        "notes": "Official Plus plan $69/mo per location."
+      },
+      {
+        "q": "Toast POS pricing",
+        "notes": "Official page lists POS software starting at $69/mo."
+      },
+      {
+        "q": "Restaurant management software market size 2024 2030 CAGR",
+        "notes": "Grand View cites ~17.4% CAGR."
+      },
+      {
+        "q": "OpenAI API pricing 2025",
+        "notes": "Used for cost modeling (tokens vary by model)."
+      },
+      {
+        "q": "Bright Data residential proxy pricing",
+        "notes": "Pay-as-you-go from ~$5.88/GB."
+      }
+    ],
+    "contradiction_audit": [],
+    "confidence_raw": {
+      "source_quality": 0.75,
+      "freshness": 0.85,
+      "agreement": 0.7,
+      "issues": 0.18
+    },
+    "facts": [
+      {
+        "id": "F001",
+        "metric": "US restaurant industry sales (forecast, 2025)",
+        "value": 1500000000000,
+        "unit": "USD/year",
+        "source": {
+          "doc": "S001",
+          "page_or_section": "Summary",
+          "quote": "The foodservice industry is forecast to reach $1.5T in sales in 2025."
+        },
+        "notes": ""
+      },
+      {
+        "id": "F002",
+        "metric": "US restaurant employment (2025 year-end)",
+        "value": 15900000,
+        "unit": "people",
+        "source": {
+          "doc": "S001",
+          "page_or_section": "Summary",
+          "quote": "Total industry employment of 15.9M by the end of 2025."
+        },
+        "notes": ""
+      },
+      {
+        "id": "F005",
+        "metric": "Restaurant management software CAGR",
+        "value": 17.4,
+        "unit": "percent",
+        "source": {
+          "doc": "S004",
+          "page_or_section": "Summary",
+          "quote": "USD 5.79B in 2024; CAGR 17.4% to 2030"
+        },
+        "notes": ""
+      }
+    ],
+    "assumptions": {
+      "market_scope": "US QSR/fast-casual first; expand to full-service after POS integrations stabilize.",
+      "scrape_frequency": "Starter: monthly pulse + quarterly deep-dive; Growth: weekly; Enterprise: daily",
+      "data_volumes": "Starter\u22483GB/mo; Growth\u224810GB/mo; Enterprise\u224830GB+/mo public web data",
+      "team_size": 3,
+      "budget_stage": "bootstrapped",
+      "notes": "Starter now includes report-credit policy to allow burst value without weekly cost."
+    },
+    "cba": {
+      "one_time_costs": [
+        {
+          "item": "POS integration \u2014 Square",
+          "usd": 20000,
+          "source_ref": "internal_estimate"
+        },
+        {
+          "item": "POS integration \u2014 Toast",
+          "usd": 25000,
+          "source_ref": "internal_estimate"
+        }
+      ],
+      "monthly_costs": [
+        {
+          "item": "Vercel Pro (3 seats)",
+          "usd": 60,
+          "source_ref": "S006"
+        },
+        {
+          "item": "Supabase Pro (1 project)",
+          "usd": 25,
+          "source_ref": "S007"
+        },
+        {
+          "item": "Proxy bandwidth reserve (company pool)",
+          "usd": 294,
+          "source_ref": "S008"
+        }
+      ],
+      "benefits": [
+        {
+          "driver": "Starter MRR per client",
+          "monthly_usd": 149,
+          "source_ref": "internal"
+        },
+        {
+          "driver": "Growth MRR per client",
+          "monthly_usd": 249,
+          "source_ref": "internal"
+        },
+        {
+          "driver": "Enterprise MRR per client",
+          "monthly_usd": 499,
+          "source_ref": "internal"
+        }
+      ],
+      "metrics": {
+        "gross_margin_pct": 74.47,
+        "break_even_customers": 33,
+        "sensitivity": {
+          "low": "Lean ops: fixed $2.5k/mo \u2192 BE \u2248 16 customers (60/30/10 mix).",
+          "base": "Normal ops: fixed $5k/mo \u2192 BE \u2248 33 customers.",
+          "high": "Optimized usage (\u221220% infra) \u2192 BE \u2248 28 customers."
+        }
+      }
+    },
+    "pricing_unit_economics": {
+      "tiers": [
+        {
+          "name": "Starter",
+          "price_usd": 149,
+          "limits": {
+            "mode": "auto",
+            "constraints": {
+              "loc": 1,
+              "geo_mi_max": 5
+            }
+          },
+          "est_cogs_usd": 35,
+          "cogs_breakdown": {
+            "llm_usd": 18,
+            "proxy_usd": 12,
+            "hosting_share_usd": 3,
+            "storage_usd": 2
+          },
+          "report_credits": {
+            "earned_per_month": 1,
+            "rollover_max": 4,
+            "expected_redemption_per_month": 0.6,
+            "unit_cost_usd": 12
+          },
+          "adhoc_price_usd": 39.99,
+          "adhoc_unit_cost_usd": 12,
+          "adhoc_gm_pct": 69.99
+        },
+        {
+          "name": "Growth",
+          "price_usd": 249,
+          "limits": {
+            "mode": "auto",
+            "constraints": {
+              "loc_max": 5,
+              "geo_mi_max": 25
+            }
+          },
+          "est_cogs_usd": 55,
+          "cogs_breakdown": {
+            "llm_usd": 30,
+            "proxy_usd": 18,
+            "hosting_share_usd": 4,
+            "storage_usd": 3
+          },
+          "adhoc_price_usd": 34.99,
+          "adhoc_unit_cost_usd": 10,
+          "adhoc_gm_pct": 71.42
+        },
+        {
+          "name": "Enterprise",
+          "price_usd": 499,
+          "price_note": "From $499 (Contact)",
+          "limits": {
+            "mode": "auto",
+            "constraints": {
+              "custom": true
+            }
+          },
+          "est_cogs_usd": 240
+        }
+      ],
+      "cac_ltv": {
+        "cac_usd": null,
+        "ltv_usd": null,
+        "churn_monthly_pct": null,
+        "source_ref": "internal"
+      }
+    },
+    "calc": {
+      "formulas": [
+        {
+          "name": "gross_margin_pct (Starter)",
+          "inputs": {
+            "price_usd": 149,
+            "cogs_usd": 35
+          },
+          "formula": "(price-cogs)/price*100",
+          "result": 76.51
+        },
+        {
+          "name": "gross_margin_pct (Growth)",
+          "inputs": {
+            "price_usd": 249,
+            "cogs_usd": 55
+          },
+          "formula": "(price-cogs)/price*100",
+          "result": 77.91
+        },
+        {
+          "name": "gross_margin_pct (Enterprise)",
+          "inputs": {
+            "price_usd": 499,
+            "cogs_usd": 240
+          },
+          "formula": "(price-cogs)/price*100",
+          "result": 51.9
+        },
+        {
+          "name": "adhoc_gm_pct (Starter)",
+          "inputs": {
+            "price_usd": 39.99,
+            "cogs_usd": 12
+          },
+          "formula": "(price-cogs)/price*100",
+          "result": 69.99
+        },
+        {
+          "name": "adhoc_gm_pct (Growth)",
+          "inputs": {
+            "price_usd": 34.99,
+            "cogs_usd": 10
+          },
+          "formula": "(price-cogs)/price*100",
+          "result": 71.42
+        },
+        {
+          "name": "starter_expected_monthly_cogs_from_credits",
+          "inputs": {
+            "credits_used": 0.6,
+            "unit_cost": 12
+          },
+          "formula": "credits_used*unit_cost",
+          "result": 7.2
+        },
+        {
+          "name": "break_even_customers (normal)",
+          "inputs": {
+            "fixed_monthly": 5000,
+            "avg_contrib_margin_usd": 152.5
+          },
+          "formula": "fixed/contrib_margin",
+          "result": 32.79
+        }
+      ],
+      "scenarios": {
+        "low": {
+          "notes": "Lower ARPU mix; AI/API costs +20%",
+          "overrides": {
+            "est_cogs_usd": {
+              "Starter": 42,
+              "Growth": 66,
+              "Enterprise": 300
+            }
+          }
+        },
+        "base": {
+          "notes": "Adopted report COGS; credit policy in place",
+          "overrides": {}
+        },
+        "high": {
+          "notes": "Higher ARPU mix; proxy/LLM optimizations -20%",
+          "overrides": {
+            "est_cogs_usd": {
+              "Starter": 28,
+              "Growth": 44,
+              "Enterprise": 192
+            }
+          }
+        }
+      }
+    },
+    "tech_plan": {
+      "platform_first": "web",
+      "rationale": "Fast iteration; universal access; no app store friction.",
+      "pos_integrations": [
+        {
+          "vendor": "Square for Restaurants",
+          "when": "Phase 1 (after 10\u201320 paying logos)",
+          "est_cost_usd": 0,
+          "roi_note": "Largest SMB base",
+          "source_ref": "S003"
+        },
+        {
+          "vendor": "Toast",
+          "when": "Phase 2",
+          "est_cost_usd": 0,
+          "roi_note": "QSR penetration",
+          "source_ref": "S002"
+        }
+      ],
+      "data_layer": {
+        "oltp": "Postgres (Supabase)",
+        "olap": "DuckDB/ClickHouse",
+        "scaling": "Start single-tenant \u2192 replicas \u2192 warehouse offload"
+      },
+      "ai_ml": {
+        "provider": "OpenAI + optional OSS",
+        "models": [
+          "gpt-4o-mini",
+          "text-embedding-3-small"
+        ],
+        "tooling": [
+          "batch",
+          "prompt caching",
+          "embeddings",
+          "metro reuse"
+        ],
+        "est_monthly_cost_by_tier": {
+          "Starter": 20,
+          "Growth": 45,
+          "Enterprise": 120
+        }
+      },
+      "ops": {
+        "observability": [
+          "Vercel analytics",
+          "custom logs"
+        ],
+        "security": [
+          "RLS in Postgres",
+          "OWASP ASVS controls"
+        ],
+        "cost_controls": [
+          "per-tier spend caps",
+          "graceful degradation",
+          "rate limits"
+        ]
+      }
+    },
+    "qa_flags": [
+      {
+        "issue": "Credit redemption rate is an assumption (0.6/mo)",
+        "severity": "med",
+        "where": "starter credits",
+        "note": "Monitor real usage and rebalance price/COGS if avg > 1.2/mo."
+      }
+    ],
+    "plan_30_60_90": {
+      "day_30": [
+        "Ship monthly pulse + quarterly deep-dive; implement credits ledger and rollover logic"
+      ],
+      "day_60": [
+        "Expose ad-hoc purchase in-product; add cost caps and alerts; publish Starter spec page"
+      ],
+      "day_90": [
+        "Case study on Starter ROI; experiment with seasonal bundled credits"
+      ]
+    },
+    "recommendation": "conditional"
+  }

@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlateTrend - AI-Powered Restaurant Intelligence Platform</title>
+    <meta name="description" content="Stop guessing. Start winning. AI-powered competitor analysis and market intelligence to optimize your restaurant's profitability.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #334155;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            border: 2px solid #667eea;
+            color: #667eea;
+            background: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f8fafc 100%);
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        /* Problem Section */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-white {
+            background: white;
+        }
+        
+        .section-gray {
+            background: #f8fafc;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            font-size: 1.25rem;
+            color: #64748b;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .card-problem {
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+        }
+        
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .card-icon-problem {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .card-icon-feature {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .card p {
+            color: #64748b;
+            text-align: center;
+        }
+        
+        /* Solution Demo */
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .demo-features {
+            space-y: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-content p {
+            color: #64748b;
+        }
+        
+        .demo-mockup {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .mockup-header {
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .mockup-dots {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+        
+        .mockup-code {
+            color: #10b981;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .highlight {
+            color: #fbbf24;
+        }
+        
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+        
+        .data-row-blue {
+            background: #dbeafe;
+        }
+        
+        .data-row-green {
+            background: #dcfce7;
+        }
+        
+        .recommendation-box {
+            background: linear-gradient(135deg, #dcfce7 0%, #dbeafe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        /* Pricing */
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .pricing-card-popular {
+            border: 4px solid #3b82f6;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3b82f6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .price-period {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .check-icon {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .signup-form {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            margin: 2rem auto 0;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-icon {
+            width: 48px;
+            height: 48px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16a34a;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .success-message {
+            background: #dcfce7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-description {
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            max-width: 300px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: #374151;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .social-link:hover {
+            background: #4b5563;
+        }
+        
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <div class="logo-icon">📊</div>
+                    <span class="gradient-text">PlateTrend</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#how-it-works" class="nav-link">How It Works</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#signup" class="btn btn-primary">Get Early Access</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="animate-fade-in">
+                <div class="badge">
+                    🚀 <span>Launching Soon - Join the Waitlist</span>
+                </div>
+                
+                <h1>
+                    Stop Guessing.<br>
+                    <span class="gradient-text">Start Winning.</span>
+                </h1>
+                
+                <p>
+                    AI-powered restaurant intelligence that analyzes competitor data, market trends, and customer sentiment 
+                    to generate <strong>actionable profitability recommendations</strong> for your restaurant.
+                </p>
+                
+                <div class="hero-cta">
+                    <a href="#signup" class="btn btn-primary" style="padding: 16px 32px; font-size: 1.1rem;">
+                        🔔 Get Notified When We Launch
+                    </a>
+                    <div style="color: #64748b; display: flex; align-items: center; gap: 8px;">
+                        ⏱️ <span>2-minute setup • No credit card required</span>
+                    </div>
+                </div>
+
+                <!-- Social Proof -->
+                <div style="margin-top: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #64748b; margin-bottom: 1rem;">
+                        <div style="display: flex; margin-right: 8px;">
+                            <div style="width: 32px; height: 32px; background: linear-gradient(45deg, #3b82f6, #8b5cf6); border-radius: 50%; border: 2px solid white; margin-left: -8px;"></div>
+                            <div style="width: 32px; height: 32px; background: linear-gradient(45deg, #10b981, #3b82f6); border-radius: 50%; border: 2px solid white; margin-left: -8px;"></div>
+                            <div style="width: 32px; height: 32px; background: linear-gradient(45deg, #8b5cf6, #ec4899); border-radius: 50%; border: 2px solid white; margin-left: -8px;"></div>
+                            <div style="width: 32px; height: 32px; background: linear-gradient(45deg, #f59e0b, #ef4444); border-radius: 50%; border: 2px solid white; margin-left: -8px;"></div>
+                        </div>
+                        <span><strong>200+</strong> restaurant owners already signed up</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-title">
+                <h2>The $10,000 Problem Every Restaurant Faces</h2>
+                <p>You're flying blind while competitors steal your customers</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card card-problem">
+                    <div class="card-icon card-icon-problem">❓</div>
+                    <h3>Guessing Game Pricing</h3>
+                    <p>Menu prices based on gut feeling instead of market data, leaving money on the table</p>
+                </div>
+                
+                <div class="card card-problem">
+                    <div class="card-icon card-icon-problem">👁️</div>
+                    <h3>Competitor Blind Spots</h3>
+                    <p>No visibility into what's working for competitors or why customers choose them</p>
+                </div>
+                
+                <div class="card card-problem">
+                    <div class="card-icon card-icon-problem">💸</div>
+                    <h3>Expensive Consultants</h3>
+                    <p>Paying $3K-15K for market analysis that's outdated the moment you receive it</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="section section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Meet Your AI Restaurant Intelligence Team</h2>
+                <p>Get the insights of a $15K consulting project, updated daily, for the cost of a weekend's ingredients</p>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">🔍</div>
+                        <div class="feature-content">
+                            <h3>Competitor Intelligence</h3>
+                            <p>Automatically analyze competitor menus, pricing, reviews, and social media buzz to identify opportunities</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-content">
+                            <h3>Trend Spotting</h3>
+                            <p>Identify emerging food trends and customer preferences before your competitors catch on</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">💰</div>
+                        <div class="feature-content">
+                            <h3>Profitability Optimization</h3>
+                            <p>Get specific recommendations on menu pricing, item positioning, and profit margin improvements</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-content">
+                            <h3>Monthly Intelligence Reports</h3>
+                            <p>Automated analysis that typically costs $5K+ from consultants, delivered fresh every month</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="dot dot-red"></div>
+                            <div class="dot dot-yellow"></div>
+                            <div class="dot dot-green"></div>
+                        </div>
+                        <div class="mockup-code">
+                            > Analyzing competitor data...<br>
+                            > Found 23 local restaurants<br>
+                            > Processing 1,247 reviews<br>
+                            > Identifying price gaps...<br>
+                            > <span class="highlight">OPPORTUNITY FOUND</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="data-row data-row-blue">
+                            <span>Average burger price in area</span>
+                            <span style="font-weight: bold; color: #3b82f6;">$14.50</span>
+                        </div>
+                        <div class="data-row data-row-green">
+                            <span>Your current price</span>
+                            <span style="font-weight: bold; color: #16a34a;">$12.00</span>
+                        </div>
+                        <div class="recommendation-box">
+                            <p style="color: #374151; font-size: 0.9rem;"><strong>AI Recommendation:</strong> Increase burger price to $13.75. Based on review sentiment analysis, customers value your quality enough to support higher pricing.</p>
+                            <p style="color: #16a34a; font-weight: bold; font-size: 0.8rem; margin-top: 8px;">💰 Estimated monthly revenue increase: $2,847</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="section section-white">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>From setup to profit optimization in 3 simple steps</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div style="text-align: center;" class="card">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: white; font-size: 2rem; font-weight: bold;">1</div>
+                    <h3>Quick Setup</h3>
+                    <p>Upload your menu and basic restaurant info. Our AI immediately starts analyzing your local market and competitors.</p>
+                </div>
+                
+                <div style="text-align: center;" class="card">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: white; font-size: 2rem; font-weight: bold;">2</div>
+                    <h3>AI Analysis</h3>
+                    <p>We scan competitor menus, analyze thousands of reviews, and identify market trends to find your profit opportunities.</p>
+                </div>
+                
+                <div style="text-align: center;" class="card">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: white; font-size: 2rem; font-weight: bold;">3</div>
+                    <h3>Profit & Grow</h3>
+                    <p>Get specific recommendations on pricing, menu positioning, and new opportunities. Watch your margins improve.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Everything You Need to Outcompete</h2>
+                <p>The complete restaurant intelligence suite</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-icon card-icon-feature">🍽️</div>
+                    <h3>Menu Gap Analysis</h3>
+                    <p>Identify profitable menu items your competitors offer that you're missing</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon card-icon-feature">🏷️</div>
+                    <h3>Smart Pricing</h3>
+                    <p>Data-driven pricing recommendations based on local market analysis</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon card-icon-feature">❤️</div>
+                    <h3>Sentiment Tracking</h3>
+                    <p>Monitor what customers love (and hate) about your competitors</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon card-icon-feature">🔥</div>
+                    <h3>Trend Alerts</h3>
+                    <p>Get notified when new food trends emerge in your market</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon card-icon-feature">📱</div>
+                    <h3>Social Media Intelligence</h3>
+                    <p>Track competitor social media performance and viral content</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon card-icon-feature">📊</div>
+                    <h3>Custom Reports</h3>
+                    <p>Monthly intelligence reports tailored to your restaurant's needs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section section-white">
+        <div class="container">
+            <div class="section-title">
+                <h2>Simple, Profitable Pricing</h2>
+                <p>Choose the plan that fits your restaurant's size</p>
+            </div>
+            
+            <div class="grid grid-3" style="max-width: 1000px; margin: 0 auto;">
+                <div class="pricing-card">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Starter</h3>
+                    <p style="color: #64748b; margin-bottom: 1.5rem;">Perfect for single location restaurants</p>
+                    <div class="price">
+                        $149<span class="price-period">/month</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li><span class="check-icon">✅</span>1 Restaurant Location</li>
+                        <li><span class="check-icon">✅</span>Competitor Analysis</li>
+                        <li><span class="check-icon">✅</span>Monthly Reports</li>
+                        <li><span class="check-icon">✅</span>Basic Trends</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-secondary" style="width: 100%; text-align: center;">Get Notified</a>
+                </div>
+                
+                <div class="pricing-card pricing-card-popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Growth</h3>
+                    <p style="color: #64748b; margin-bottom: 1.5rem;">For restaurants ready to scale</p>
+                    <div class="price">
+                        $249<span class="price-period">/month</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li><span class="check-icon">✅</span>Up to 5 Locations</li>
+                        <li><span class="check-icon">✅</span>Advanced Analytics</li>
+                        <li><span class="check-icon">✅</span>Weekly Reports</li>
+                        <li><span class="check-icon">✅</span>Social Media Intelligence</li>
+                        <li><span class="check-icon">✅</span>Trend Alerts</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-primary" style="width: 100%; text-align: center;">Get Notified</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Enterprise</h3>
+                    <p style="color: #64748b; margin-bottom: 1.5rem;">For restaurant groups and chains</p>
+                    <div class="price">
+                        $499<span class="price-period">/month</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li><span class="check-icon">✅</span>Unlimited Locations</li>
+                        <li><span class="check-icon">✅</span>Custom Reports</li>
+                        <li><span class="check-icon">✅</span>API Access</li>
+                        <li><span class="check-icon">✅</span>Priority Support</li>
+                        <li><span class="check-icon">✅</span>Dedicated Account Manager</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-secondary" style="width: 100%; text-align: center;">Get Notified</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: #64748b; margin-bottom: 1rem;">💰 <strong>ROI Guarantee:</strong> Most customers see 3-5x ROI within the first month</p>
+                <p style="color: #9ca3af; font-size: 0.9rem;">Compare to hiring a consultant: $5K+ for a one-time analysis vs. continuous intelligence for $149-499/month</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Restaurant Owners Are Excited</h2>
+                <p>See what early adopters are saying</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div style="background: #dbeafe; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 48px; height: 48px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">MR</div>
+                        <div style="margin-left: 12px;">
+                            <h4 style="font-weight: 600; margin-bottom: 2px;">Maria Rodriguez</h4>
+                            <p style="font-size: 0.9rem; color: #64748b;">Owner, Local Bistro</p>
+                        </div>
+                    </div>
+                    <p style="color: #374151;">"Finally! Something that tells me what my competitors are actually doing. Can't wait to see how this impacts my margins."</p>
+                </div>
+                
+                <div style="background: #dcfce7; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #16a34a;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 48px; height: 48px; background: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">DK</div>
+                        <div style="margin-left: 12px;">
+                            <h4 style="font-weight: 600; margin-bottom: 2px;">David Kim</h4>
+                            <p style="font-size: 0.9rem; color: #64748b;">Manager, Urban Eats</p>
+                        </div>
+                    </div>
+                    <p style="color: #374151;">"I've been manually checking competitors for years. Having AI do this automatically would be a game-changer for our pricing strategy."</p>
+                </div>
+                
+                <div style="background: #f3e8ff; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #8b5cf6;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 48px; height: 48px; background: #8b5cf6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SP</div>
+                        <div style="margin-left: 12px;">
+                            <h4 style="font-weight: 600; margin-bottom: 2px;">Sarah Patel</h4>
+                            <p style="font-size: 0.9rem; color: #64748b;">Co-owner, Farm Table</p>
+                        </div>
+                    </div>
+                    <p style="color: #374151;">"The competitive analysis feature sounds exactly like what we pay our consultant $5K for quarterly. Sign me up!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="signup" class="section cta-section">
+        <div class="container">
+            <h2 style="font-size: 3rem; font-weight: bold; margin-bottom: 1.5rem;">
+                Ready to Stop Guessing and Start Winning?
+            </h2>
+            <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 2.5rem;">
+                Join 200+ restaurant owners getting early access to PlateTrend. 
+                Be the first to know when we launch and get exclusive early-bird pricing.
+            </p>
+            
+            <div class="signup-form">
+                <div class="form-header">
+                    <div class="form-icon">🔔</div>
+                    <span style="font-size: 1.1rem; font-weight: 600; color: #374151;">Get Notified When We Launch</span>
+                </div>
+                
+                <form id="signupForm">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Restaurant Name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Your Email Address" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="location" placeholder="Restaurant Location (City, State)" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="locations" class="form-input" required>
+                            <option value="">Number of Locations</option>
+                            <option value="1">1 Location</option>
+                            <option value="2-5">2-5 Locations</option>
+                            <option value="6-10">6-10 Locations</option>
+                            <option value="10+">10+ Locations</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn" class="btn btn-primary animate-pulse" style="width: 100%; font-size: 1.1rem; padding: 16px;">
+                        🚀 Reserve My Early Access Spot
+                    </button>
+                </form>
+                
+                <div id="successMessage" class="success-message">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <span style="color: #16a34a; margin-right: 8px;">✅</span>
+                        <span style="color: #16a34a; font-weight: 600;">Success! You're on the list.</span>
+                    </div>
+                    <p style="color: #16a34a; font-size: 0.9rem;">We'll notify you as soon as PlateTrend launches!</p>
+                </div>
+                
+                <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 1rem; text-align: center;">
+                    🔒 We respect your privacy. No spam, ever. Unsubscribe anytime.
+                </p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">2-min</div>
+                    <div class="stat-label">Setup Time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">$5K+</div>
+                    <div class="stat-label">Saved vs Consultants</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Market Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-white">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about PlateTrend</p>
+            </div>
+            
+            <div style="space-y: 2rem;">
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">How does PlateTrend analyze my competitors?</h3>
+                    <p style="color: #64748b;">Our AI automatically scans competitor websites, reviews, social media, and public menu data to identify pricing strategies, popular items, and customer sentiment. This happens continuously, so you always have the latest intel.</p>
+                </div>
+                
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">What kind of ROI can I expect?</h3>
+                    <p style="color: #64748b;">Most restaurants see 3-5x ROI within the first month through optimized pricing alone. For example, increasing just 3 menu items by $1-2 based on our analysis typically generates $1,000-3,000 additional monthly revenue.</p>
+                </div>
+                
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">How is this different from hiring a consultant?</h3>
+                    <p style="color: #64748b;">Traditional consultants charge $3K-15K for a one-time analysis that's outdated within weeks. PlateTrend provides continuous, real-time intelligence for a fraction of the cost, with updates as market conditions change.</p>
+                </div>
+                
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">When will PlateTrend be available?</h3>
+                    <p style="color: #64748b;">We're launching in Q4 2025! Early subscribers get exclusive access to beta testing, special launch pricing, and priority onboarding. Sign up now to secure your spot.</p>
+                </div>
+                
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Do you integrate with existing POS systems?</h3>
+                    <p style="color: #64748b;">Our iPad app will integrate with major POS systems for seamless menu updates and cost tracking. The web platform works independently, so you can start benefiting immediately without changing your current setup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <div class="logo-icon">📊</div>
+                        <span style="font-size: 1.25rem; font-weight: bold;">PlateTrend</span>
+                    </div>
+                    <p class="footer-description">
+                        AI-powered restaurant intelligence that helps you stop guessing and start winning against your competition.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">💼</a>
+                        <a href="#" class="social-link">📸</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Demo</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 PlateTrend. All rights reserved. Made with ❤️ for restaurant owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form handling
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const location = document.getElementById('location').value;
+            const locations = document.getElementById('locations').value;
+            
+            // Basic validation
+            if (!name || !email || !location || !locations) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Simple email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Simulate form submission
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '⏳ Submitting...';
+            submitBtn.disabled = true;
+            
+            // Here you would integrate with your backend
+            // For now, we'll simulate a successful submission
+            setTimeout(() => {
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+                
+                // Log the data (in production, send to your backend)
+                console.log('Signup data:', { name, email, location, locations });
+                
+                // Track analytics event (replace with your analytics)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'signup', {
+                        'event_category': 'engagement',
+                        'event_label': 'early_access'
+                    });
+                }
+            }, 1500);
+        });
+
+        // Add animation to elements when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for animation
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+        
